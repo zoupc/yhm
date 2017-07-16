@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>上传用户信息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			html, body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				font-family: "微软雅黑";
+				font-size: 16px;
+				background-color: #F7F7F7;
+			}
+			.container {
+				padding: 10px 20px;
+			}
+			.wrap {
+				//display: flex;
+			}
+			.item {
+				display: flex;
+				width: 100%;
+				height: 35px;
+    			line-height: 35px;
+				margin: 5px 0;
+			}
+			
+			.item>span {
+				flex-direction: row;
+				width: 50%;
+				text-align: right;
+				white-space: nowrap;
+			}
+			@media only screen and (max-width: 374px) {
+				body {
+					font-size: 14px;
+				}
+				.item>span {
+					width: 55%;
+				}
+			}
+			.item>span>i {
+				color: #FF5757;
+			}
+			.item>input {
+				flex-direction: row;
+				width: 100%;
+			}
+			.upload {
+				display: block;
+				width: 40%;
+				height: 40px;
+				line-height: 40px;
+				margin: 25px auto 0;
+				color: white;
+				background-color: #1992D3;
+				text-align: center;
+				text-decoration: none;
+				border-radius: 5px;
+			}
+			.upload:active {
+				text-decoration: none;
+				background-color: #1575A9;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<p>填写初审信息(*为必填)</p>
+			<div class="wrap">
+				<div class="item">
+					<span>商户姓名<i>*</i>：</span>
+					<input type="text" id="name" value="" placeholder="请输入中文姓名" />
+				</div>
+				<div class="item">
+					<span>联系电话<i>*</i>：</span>
+					<input type="text" id="phone" value="" placeholder="请输入手机号"/>
+				</div>
+				<div class="item">
+					<span>联系地址<i>*</i>：</span>
+					<input type="text" id="address" value="" placeholder="请输入联系地址"/>
+				</div>
+				<div class="item">
+					<span>身份证正面照<i>*</i>：</span>
+					<input type="image" id="photo_id_z" value="请选择" />
+				</div>
+				<div class="item">
+					<span>身份证反面照<i>*</i>：</span>
+					<input type="image" id="photo_id_f" value="请选择" />
+				</div>
+				<div class="item">
+					<span>银行账户<i>*</i>：</span>
+					<input type="text" id="bank_account" value="" placeholder="请输入银行账户"/>
+				</div>
+				<div class="item">
+					<span>银行支行<i>*</i>：</span>
+					<input type="text" id="bank_name" value="" placeholder="请输入银行支行"/>
+				</div>
+				<div class="item">
+					<span>利率<i>*</i>：</span>
+					<input type="text" id="rate" value="" placeholder="请输入利率"/>
+				</div>
+			</div>
+			<a class="upload" id="upload">确定提交</a>
+		</div>
+	</body>
+</html>
