@@ -4,68 +4,7 @@
 		<meta charset="utf-8" />
 		<title>上传用户信息</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<style type="text/css">
-			html, body {
-				width: 100%;
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				font-family: "微软雅黑";
-				font-size: 16px;
-				background-color: #F7F7F7;
-			}
-			.container {
-				padding: 10px 20px;
-			}
-			.wrap {
-				//display: flex;
-			}
-			.item {
-				display: flex;
-				width: 100%;
-				height: 35px;
-    			line-height: 35px;
-				margin: 5px 0;
-			}
-			
-			.item>span {
-				flex-direction: row;
-				width: 50%;
-				text-align: right;
-				white-space: nowrap;
-			}
-			@media only screen and (max-width: 374px) {
-				body {
-					font-size: 14px;
-				}
-				.item>span {
-					width: 55%;
-				}
-			}
-			.item>span>i {
-				color: #FF5757;
-			}
-			.item>input {
-				flex-direction: row;
-				width: 100%;
-			}
-			.upload {
-				display: block;
-				width: 40%;
-				height: 40px;
-				line-height: 40px;
-				margin: 25px auto 0;
-				color: white;
-				background-color: #1992D3;
-				text-align: center;
-				text-decoration: none;
-				border-radius: 5px;
-			}
-			.upload:active {
-				text-decoration: none;
-				background-color: #1575A9;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
 	</head>
 	<body>
 		<div class="container">
@@ -83,13 +22,31 @@
 					<span>联系地址<i>*</i>：</span>
 					<input type="text" id="address" value="" placeholder="请输入联系地址"/>
 				</div>
-				<div class="item">
-					<span>身份证正面照<i>*</i>：</span>
-					<input type="image" id="photo_id_z" value="请选择" />
+				<div class="item item-img">
+					<span>身份证正反面<i>*</i>：</span>
+					<div class="box">
+						<div class="box-img">
+							<img id="img-sf-1" src="img/sf_1.jpg"/>
+							<input id="btn-sf-1" type="file" class="submit" value=""/>
+						</div>
+						<div class="box-img">
+							<img id="img-sf-2" src="img/sf_2.jpg"/>
+							<input id="btn-sf-2" type="file" class="submit" value=""/>
+						</div>
+					</div>
 				</div>
-				<div class="item">
-					<span>身份证反面照<i>*</i>：</span>
-					<input type="image" id="photo_id_f" value="请选择" />
+				<div class="item item-img">
+					<span>银行卡正反面<i>*</i>：</span>
+					<div class="box">
+						<div class="box-img">
+							<img id="img-yh-1" src="img/yh_1.jpg"/>
+							<input id="btn-yh-1" type="file" class="submit" value=""/>
+						</div>
+						<div class="box-img">
+							<img id="img-yh-2" src="img/yh_2.jpg"/>
+							<input id="btn-yh-2" type="file" class="submit" value=""/>
+						</div>
+					</div>
 				</div>
 				<div class="item">
 					<span>银行账户<i>*</i>：</span>
@@ -99,12 +56,168 @@
 					<span>银行支行<i>*</i>：</span>
 					<input type="text" id="bank_name" value="" placeholder="请输入银行支行"/>
 				</div>
-				<div class="item">
-					<span>利率<i>*</i>：</span>
-					<input type="text" id="rate" value="" placeholder="请输入利率"/>
-				</div>
 			</div>
 			<a class="upload" id="upload">确定提交</a>
 		</div>
+		
+		<script src="js/jquery-1.2.6.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="js/plupload.full.min.js"></script>
+		<script type="text/javascript">
+			$().ready(function(){
+				//调整图片位置
+				var one_left = $("#name").offset().left;
+				var two_left = $(".box:first").offset().left;
+				var margin_left = one_left - two_left;
+				$(".item-img span").css("margin-left", margin_left+"px");
+			});
+			
+		</script>
+		<script>
+			var img_sf_1 = "";//身份证正面
+			var img_sf_2 = "";//身份证反面
+			var img_yh_1 = "";//银行卡正面
+			var img_yh_2 = "";//银行卡反面
+			
+			//发送邮件 param = 参数名称，img_url = 图片链接
+			function sendMaill(param, img_url) {
+				if(param == "img_sf_1") {
+					img_sf_1 = img_url;
+				} else if(param == "img_sf_2") {
+					img_sf_2 = img_url;
+				} else if(param == "img_yh_1") {
+					img_yh_1 = img_url;
+				} else if(param == "img_yh_2") {
+					img_yh_2 = img_url;
+				}
+				
+				if (img_sf_1 != "" && img_sf_2 != "" && img_yh_1 != "" && img_yh_2 != "") {
+					
+					var data = {
+						"name":$("#name").val(),
+						"phone":$("#phone").val(),
+						"address":$("#address").val(),
+						"bank_account":$("#bank_account").val(),
+						"bank_name":$("#bank_name").val(),
+						"img_sf_1":img_sf_1,
+						"img_sf_2":img_sf_2,
+						"img_yh_1":img_yh_1,
+						"img_yh_2":img_yh_2
+					};
+					
+					$.ajax({
+						type:"post",
+						url:"sendMail.php",
+						data:data,
+						async:true,
+						dataType:"json",
+						success:function(msg) {
+							console.log(msg.result);
+						}
+					});
+				} else {
+					return param;
+				}
+			};
+			
+			//身份证正面
+			var uploader_1 = uploaderFunction("btn-sf-1", "img_sf_1", "#img-sf-1");
+			//身份证反面
+			var uploader_2 = uploaderFunction("btn-sf-2", "img_sf_2", "#img-sf-2");
+			//银行卡正面
+			var uploader_3 = uploaderFunction("btn-yh-1", "img_yh_1", "#img-yh-1");
+			//银行卡反面
+			var uploader_4 = uploaderFunction("btn-yh-2", "img_yh_2", "#img-yh-2");
+			
+			//上传按钮
+			$('#upload').click(function(){
+				uploader_1.start(); //开始上传
+				uploader_2.start(); //开始上传
+				uploader_3.start(); //开始上传
+				uploader_4.start(); //开始上传
+			});
+			
+			//plupload 上传功能封装函数，btnName上传按钮，imgName图片名称（4类），previewName预览图标签名称
+			function uploaderFunction(btnName, imgName, previewName) {
+				var uploader = new plupload.Uploader({ //实例化一个plupload上传对象
+					runtimes: 'html5,flash,silverlight,html4', //上传插件初始化选用那种方式的优先级顺序  
+					browse_button: btnName, // 上传按钮  
+					url: "upimgs.php?get=upimg", //远程上传地址  
+					flash_swf_url: 'js/Moxie.swf', //flash文件地址  
+					silverlight_xap_url: 'js/Moxie.xap', //silverlight文件地址  
+					filters: {
+						max_file_size: '10240kb', //最大上传文件大小（格式100b, 10kb, 10mb, 1gb）  
+						mime_types: [ //用来限定上传文件的类型，为一个数组
+							{ title: "Image Files",extensions: "jpg,png,gif,bmp,tif" } //title为该过滤器的名称，extensions为文件扩展名
+						]
+					},
+					multipart_params: {}, //文件上传附加参数  
+					file_data_name: "file", //文件上传的名称  
+					multi_selection: false //true:多文件上传[Ctrl按钮], false 单文件上传 
+				});
+				uploader.init(); //初始化
+			
+				//绑定文件添加进队列事件
+				uploader.bind('FilesAdded',function(uploader,files){
+					//限制单文件上传
+					$.each(uploader.files, function (i, file) {
+				        if (uploader.files.length <= 1) {
+				            return;
+				        }
+				        uploader.removeFile(file);
+				    });
+					for(var i = 0, len = files.length; i<len; i++){
+						//预览图
+						!function(i){
+							previewImage(files[i],function(imgsrc){
+								$(previewName).attr("src", imgsrc);
+							})
+					    }(i);
+					}
+				});
+			
+				//绑定文件上传进度事件
+				//uploader.bind('UploadProgress',function(uploader,file){
+				//	$('#file-'+file.id+' .progress').css('width',file.percent + '%');//控制进度条
+				//});
+				//文件上传成功的时候触发 ，up为当前的plupload实例对象，file为触发此事件的文件对象，info为服务器返回的信息对象
+				uploader.bind("FileUploaded",function(up, file, info) {
+					//alert("上传成功！");
+					var result = sendMaill(imgName, info.response);
+					console.log(result);
+				});
+				//上传出错的时候触发
+				uploader.bind("Error", function(up, err) {
+					alert("请上传文件大小为10M以内，文件格式为jpg,png,gif的图片文件");
+				});
+				
+				return uploader;
+			}
+			
+			//plupload中为我们提供了mOxie对象
+			//有关mOxie的介绍和说明请看：https://github.com/moxiecode/moxie/wiki/API
+			//如果你不想了解那么多的话，那就照抄本示例的代码来得到预览的图片吧
+			function previewImage(file,callback){//file为plupload事件监听函数参数中的file对象,callback为预览图片准备完成的回调函数
+				if(!file || !/image\//.test(file.type)) return; //确保文件是图片
+				if(file.type=='image/gif'||file.type=='image/bmp'){//gif使用FileReader进行预览,因为mOxie.Image只支持jpg和png
+					var fr = new mOxie.FileReader();
+					fr.onload = function(){
+						callback(fr.result);
+						fr.destroy();
+						fr = null;
+					}
+					fr.readAsDataURL(file.getSource());
+				}else{
+					var preloader = new mOxie.Image();
+					preloader.onload = function() {
+						preloader.downsize( 300, 300 );//先压缩一下要预览的图片,宽300，高300
+						var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL(); //得到图片src,实质为一个base64编码的数据
+						callback && callback(imgsrc); //callback传入的参数为预览图片的url
+						preloader.destroy();
+						preloader = null;
+					};
+					preloader.load( file.getSource() );
+				}	
+			}
+		</script>
 	</body>
 </html>
