@@ -36,6 +36,15 @@
 					</div>
 				</div>
 				<div class="item item-img">
+					<span>身份证手持照<i>*</i>：</span>
+					<div class="box">
+						<div class="box-img">
+							<img id="img-sf-3" src="img/sf_3.jpg"/>
+							<input id="btn-sf-3" type="file" class="submit" value=""/>
+						</div>
+					</div>
+				</div>
+				<div class="item item-img">
 					<span>银行卡正反面<i>*</i>：</span>
 					<div class="box">
 						<div class="box-img">
@@ -69,28 +78,32 @@
 				var two_left = $(".box:first").offset().left;
 				var margin_left = one_left - two_left;
 				$(".item-img span").css("margin-left", margin_left+"px");
+				
 			});
 			
 		</script>
 		<script>
 			var img_sf_1 = "";//身份证正面
 			var img_sf_2 = "";//身份证反面
+			var img_sf_3 = "";//身份证手持照
 			var img_yh_1 = "";//银行卡正面
 			var img_yh_2 = "";//银行卡反面
 			
 			//发送邮件 param = 参数名称，img_url = 图片链接
-			function sendMaill(param, img_url) {
+			function sendMail(param, img_url) {
 				if(param == "img_sf_1") {
 					img_sf_1 = img_url;
 				} else if(param == "img_sf_2") {
 					img_sf_2 = img_url;
+				} else if(param == "img_sf_3") {
+					img_sf_3 = img_url;
 				} else if(param == "img_yh_1") {
 					img_yh_1 = img_url;
 				} else if(param == "img_yh_2") {
 					img_yh_2 = img_url;
 				}
 				
-				if (img_sf_1 != "" && img_sf_2 != "" && img_yh_1 != "" && img_yh_2 != "") {
+				if (img_sf_1 != "" && img_sf_2 != "" && img_sf_3 != "" && img_yh_1 != "" && img_yh_2 != "") {
 					
 					var data = {
 						"name":$("#name").val(),
@@ -100,6 +113,7 @@
 						"bank_name":$("#bank_name").val(),
 						"img_sf_1":img_sf_1,
 						"img_sf_2":img_sf_2,
+						"img_sf_3":img_sf_3,
 						"img_yh_1":img_yh_1,
 						"img_yh_2":img_yh_2
 					};
@@ -123,10 +137,12 @@
 			var uploader_1 = uploaderFunction("btn-sf-1", "img_sf_1", "#img-sf-1");
 			//身份证反面
 			var uploader_2 = uploaderFunction("btn-sf-2", "img_sf_2", "#img-sf-2");
+			//身份证手持照
+			var uploader_3 = uploaderFunction("btn-sf-3", "img_sf_3", "#img-sf-3");
 			//银行卡正面
-			var uploader_3 = uploaderFunction("btn-yh-1", "img_yh_1", "#img-yh-1");
+			var uploader_4 = uploaderFunction("btn-yh-1", "img_yh_1", "#img-yh-1");
 			//银行卡反面
-			var uploader_4 = uploaderFunction("btn-yh-2", "img_yh_2", "#img-yh-2");
+			var uploader_5 = uploaderFunction("btn-yh-2", "img_yh_2", "#img-yh-2");
 			
 			//上传按钮
 			$('#upload').click(function(){
@@ -134,6 +150,7 @@
 				uploader_2.start(); //开始上传
 				uploader_3.start(); //开始上传
 				uploader_4.start(); //开始上传
+				uploader_5.start(); //开始上传
 			});
 			
 			//plupload 上传功能封装函数，btnName上传按钮，imgName图片名称（4类），previewName预览图标签名称
@@ -170,6 +187,7 @@
 						!function(i){
 							previewImage(files[i],function(imgsrc){
 								$(previewName).attr("src", imgsrc);
+								$(previewName).next("input.submit").css("background","none");
 							})
 					    }(i);
 					}
@@ -182,7 +200,7 @@
 				//文件上传成功的时候触发 ，up为当前的plupload实例对象，file为触发此事件的文件对象，info为服务器返回的信息对象
 				uploader.bind("FileUploaded",function(up, file, info) {
 					//alert("上传成功！");
-					var result = sendMaill(imgName, info.response);
+					var result = sendMail(imgName, info.response);
 					console.log(result);
 				});
 				//上传出错的时候触发

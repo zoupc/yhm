@@ -5,7 +5,9 @@
  */
 
 function sendMail($array_img, $array_content){
-	$to = "zoupc@seeunsee.cn";//收件人邮箱
+	$to_boss = "zoupc@seeunsee.cn";//收件人邮箱--总代理
+	$to_sub = "13798991257@163.com";//收件人邮箱--分代理
+	
 	$title = "标题党";
     //引入PHPMailer的核心文件 使用require_once包含避免出现PHPMailer类重复定义的警告
     require_once("phpmailer/class.phpmailer.php"); 
@@ -56,7 +58,8 @@ function sendMail($array_img, $array_content){
     $mail->isHTML(true); 
 
     //设置收件人邮箱地址 该方法有两个参数 第一个参数为收件人邮箱地址 第二参数为给该地址设置的昵称 不同的邮箱系统会自动进行处理变动 这里第二个参数的意义不大
-    $mail->addAddress($to,'邮件名称');
+    $mail->addAddress($to_boss,'总代理');
+	$mail->addAddress($to_sub,'分代理');
 
     //添加多个收件人 则多次调用方法即可
     // $mail->addAddress('xxx@163.com','lsgo在线通知');
@@ -70,8 +73,9 @@ function sendMail($array_img, $array_content){
     //为该邮件添加附件 该方法也有两个参数 第一个参数为附件存放的目录（相对目录、或绝对目录均可） 第二参数为在邮件附件中该附件的名称
     $mail->addAttachment($array_img[0],$array_content[0].'_身份证正面.jpg');
 	$mail->addAttachment($array_img[1],$array_content[0].'_身份证反面.jpg');
-	$mail->addAttachment($array_img[2],$array_content[0].'_银行卡正面.jpg');
-	$mail->addAttachment($array_img[3],$array_content[0].'_银行卡反面.jpg');
+	$mail->addAttachment($array_img[2],$array_content[0].'_身份证手持照.jpg');
+	$mail->addAttachment($array_img[3],$array_content[0].'_银行卡正面.jpg');
+	$mail->addAttachment($array_img[4],$array_content[0].'_银行卡反面.jpg');
     //同样该方法可以多次调用 上传多个附件
     //$mail->addAttachment('./Jlib-1.1.0.js','Jlib.js');
 
